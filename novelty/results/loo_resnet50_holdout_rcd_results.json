@@ -1,0 +1,36 @@
+{
+  "holdout": "rcd",
+  "model": "resnet50",
+  "seed": 42,
+  "sizes": {
+    "train": 2670,
+    "validation": 1407,
+    "test": 9709,
+    "readable_train": 2670,
+    "readable_validation": 1407
+  },
+  "test_classes_present": [
+    "Plastic"
+  ],
+  "test_classes_missing_in_training": [],
+  "metrics_on_test": {
+    "accuracy": 0.5101452260788959,
+    "balanced_accuracy": 0.5101452260788959,
+    "weighted_precision": 1.0,
+    "weighted_recall": 0.5101452260788959,
+    "weighted_f1": 0.6756240622016096,
+    "macro_f1": 0.0844530077752012
+  },
+  "train_seconds": 553.9682364463806,
+  "settings": {
+    "holdout": "rcd",
+    "model": "resnet50",
+    "epochs": 3,
+    "ft_epochs": 0,
+    "max_per_class": 300,
+    "batch_size": 16,
+    "class_weights": false,
+    "seed": 42,
+    "inspect": false
+  }
+}

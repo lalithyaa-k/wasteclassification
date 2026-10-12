@@ -1,0 +1,68 @@
+{
+  "test_metrics": {
+    "resnet50": {
+      "accuracy": 0.8352706741946198,
+      "balanced_accuracy": 0.7975221924459643,
+      "weighted_precision": 0.8582046916936086,
+      "weighted_recall": 0.8352706741946198,
+      "weighted_f1": 0.8423223878987057,
+      "macro_f1": 0.7680700991244285
+    },
+    "efficientnetb0": {
+      "accuracy": 0.818997010959814,
+      "balanced_accuracy": 0.834412395798418,
+      "weighted_precision": 0.8571767170227911,
+      "weighted_recall": 0.818997010959814,
+      "weighted_f1": 0.8296285403959477,
+      "macro_f1": 0.7586720804581204
+    },
+    "ensemble_equal": {
+      "accuracy": 0.839256061109266,
+      "balanced_accuracy": 0.8284245352783154,
+      "weighted_precision": 0.865240678141243,
+      "weighted_recall": 0.839256061109266,
+      "weighted_f1": 0.8468876765564393,
+      "macro_f1": 0.7826544375533095
+    },
+    "ensemble_tuned": {
+      "accuracy": 0.8425772168714712,
+      "balanced_accuracy": 0.8187723112418808,
+      "weighted_precision": 0.867029950652661,
+      "weighted_recall": 0.8425772168714712,
+      "weighted_f1": 0.8499270638280791,
+      "macro_f1": 0.7811862893303471,
+      "resnet_weight_chosen_on_val": 0.6000000000000001
+    }
+  },
+  "val_macro_f1_by_resnet_weight": {
+    "0.0": 0.7549276086919612,
+    "0.1": 0.7654082597061049,
+    "0.2": 0.7770690320226754,
+    "0.3": 0.7923915203437555,
+    "0.4": 0.8014589977071535,
+    "0.5": 0.8108068906089456,
+    "0.6": 0.8152764420812884,
+    "0.7": 0.8114536746896325,
+    "0.8": 0.806881024925566,
+    "0.9": 0.8065865295223258,
+    "1.0": 0.8068759749400066
+  },
+  "complementarity_test": {
+    "both_correct": 0.7761541016273663,
+    "only_resnet_correct": 0.0591165725672534,
+    "only_efficientnet_correct": 0.04284290933244769,
+    "both_wrong": 0.12188641647293258,
+    "oracle_upper_bound_accuracy": 0.8781135835270674
+  },
+  "class_names": [
+    "Cardboard",
+    "Food Organics",
+    "Glass",
+    "Metal",
+    "Miscellaneous Trash",
+    "Paper",
+    "Plastic",
+    "Textile Trash",
+    "Vegetation"
+  ]
+}

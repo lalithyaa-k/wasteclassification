@@ -1,0 +1,17 @@
+{
+    "model": "EfficientNetB0",
+    "validation_loss": 0.5502145290374756,
+    "validation_accuracy": 0.8195644617080688,
+    "training_time_seconds": 3555.4,
+    "class_names": [
+        "Cardboard",
+        "Food Organics",
+        "Glass",
+        "Metal",
+        "Miscellaneous Trash",
+        "Paper",
+        "Plastic",
+        "Textile Trash",
+        "Vegetation"
+    ]
+}

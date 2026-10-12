@@ -1,0 +1,9 @@
+{
+    "model": "ResNet50",
+    "test_samples": 3011,
+    "test_accuracy": 0.8352706741946198,
+    "weighted_precision": 0.8582046916936086,
+    "weighted_recall": 0.8352706741946198,
+    "weighted_f1_score": 0.8423223878987057,
+    "inference_time_seconds": 123.78
+}

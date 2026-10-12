@@ -1,0 +1,17 @@
+{
+    "model": "ResNet50",
+    "validation_loss": 0.4871057868003845,
+    "validation_accuracy": 0.8589699268341064,
+    "training_time_seconds": 79155.22,
+    "class_names": [
+        "Cardboard",
+        "Food Organics",
+        "Glass",
+        "Metal",
+        "Miscellaneous Trash",
+        "Paper",
+        "Plastic",
+        "Textile Trash",
+        "Vegetation"
+    ]
+}

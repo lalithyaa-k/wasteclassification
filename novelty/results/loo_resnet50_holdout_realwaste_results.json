@@ -1,0 +1,47 @@
+{
+  "holdout": "realwaste",
+  "model": "resnet50",
+  "seed": 42,
+  "sizes": {
+    "train": 1529,
+    "validation": 2151,
+    "test": 4752,
+    "readable_train": 1529,
+    "readable_validation": 2151
+  },
+  "test_classes_present": [
+    "Cardboard",
+    "Food Organics",
+    "Glass",
+    "Metal",
+    "Miscellaneous Trash",
+    "Paper",
+    "Plastic",
+    "Textile Trash",
+    "Vegetation"
+  ],
+  "test_classes_missing_in_training": [
+    "Textile Trash",
+    "Vegetation"
+  ],
+  "metrics_on_test": {
+    "accuracy": 0.27504208754208753,
+    "balanced_accuracy": 0.24853401612242385,
+    "weighted_precision": 0.20042724645425683,
+    "weighted_recall": 0.27504208754208753,
+    "weighted_f1": 0.1820692097457157,
+    "macro_f1": 0.1608590574640335
+  },
+  "train_seconds": 623.0705544948578,
+  "settings": {
+    "holdout": "realwaste",
+    "model": "resnet50",
+    "epochs": 3,
+    "ft_epochs": 0,
+    "max_per_class": 300,
+    "batch_size": 16,
+    "class_weights": false,
+    "seed": 42,
+    "inspect": false
+  }
+}

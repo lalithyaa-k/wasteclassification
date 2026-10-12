@@ -1,0 +1,9 @@
+{
+    "model": "EfficientNetB0",
+    "test_samples": 3011,
+    "test_accuracy": 0.818997010959814,
+    "weighted_precision": 0.8571767170227911,
+    "weighted_recall": 0.818997010959814,
+    "weighted_f1_score": 0.8296285403959477,
+    "inference_time_seconds": 66.85
+}

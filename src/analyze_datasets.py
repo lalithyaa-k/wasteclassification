@@ -1,432 +1,97 @@
+```python
 from pathlib import Path
+import sys
+import numpy as np
+import tensorflow as tf
 from PIL import Image
-import json
-
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-REALWASTE_PATH = (
-    PROJECT_ROOT
-    / "datasets"
-    / "realwaste"
-    / "realwaste-main"
-    / "RealWaste"
-)
-
-TACO_PATH = (
-    PROJECT_ROOT
-    / "datasets"
-    / "taco"
-)
-
-RCD_PATH = (
-    PROJECT_ROOT
-    / "datasets"
-    / "rcd"
-    / "Remondis_Contamination_Dataset (RCD)"
-)
-
-IMAGE_EXTENSIONS = {
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".bmp",
-    ".webp"
+MODEL_PATHS = {
+    "ResNet50": PROJECT_ROOT / "models" / "resnet50_waste.keras",
+    "EfficientNetB0": PROJECT_ROOT / "models" / "efficientnetb0_waste.keras"
 }
 
+IMAGE_SIZE = (224, 224)
 
-def count_images(folder):
-    if not folder.exists():
-        return 0
+CLASSES = [
+    "Cardboard",
+    "Food Organics",
+    "Glass",
+    "Metal",
+    "Miscellaneous Trash",
+    "Paper",
+    "Plastic",
+    "Textile Trash",
+    "Vegetation"
+]
 
-    return sum(
-        1
-        for file in folder.rglob("*")
-        if file.is_file()
-        and file.suffix.lower() in IMAGE_EXTENSIONS
-    )
 
+def predict_image(image_path, model_name, model_path, image_array):
 
-def get_image_info(folder):
-    total = 0
-    corrupted = 0
-    extensions = {}
+    if not model_path.exists():
+        print(f"\nModel file not found: {model_path}")
+        return
 
-    if not folder.exists():
-        return {
-            "total": 0,
-            "corrupted": 0,
-            "extensions": {}
-        }
+    print(f"\nLoading {model_name} model...")
 
-    for file in folder.rglob("*"):
+    model = tf.keras.models.load_model(model_path)
 
-        if not file.is_file():
-            continue
+    processed_image = image_array.copy()
 
-        if file.suffix.lower() not in IMAGE_EXTENSIONS:
-            continue
-
-        total += 1
-
-        extension = file.suffix.lower()
-
-        extensions[extension] = (
-            extensions.get(extension, 0) + 1
+    if model_name == "ResNet50":
+        processed_image = tf.keras.applications.resnet50.preprocess_input(
+            processed_image
         )
 
-        try:
-            with Image.open(file) as image:
-                image.verify()
+    predictions = model.predict(processed_image, verbose=0)[0]
 
-        except Exception:
-            corrupted += 1
+    predicted_index = int(np.argmax(predictions))
 
-    return {
-        "total": total,
-        "corrupted": corrupted,
-        "extensions": extensions
-    }
+    print("\n" + "=" * 50)
+    print(f"{model_name.upper()} PREDICTION")
+    print("=" * 50)
+    print(f"Image      : {image_path.name}")
+    print(f"Prediction : {CLASSES[predicted_index]}")
+    print(f"Confidence : {predictions[predicted_index] * 100:.2f}%")
 
+    print("\nAll class probabilities:")
 
-def analyze_realwaste():
-
-    print("\n========== REALWASTE ==========")
-
-    if not REALWASTE_PATH.exists():
-
-        print("RealWaste path not found:")
-        print(REALWASTE_PATH)
-
-        return {}
-
-    classes = {}
-    total = 0
-
-    for folder in sorted(REALWASTE_PATH.iterdir()):
-
-        if not folder.is_dir():
-            continue
-
-        count = count_images(folder)
-
-        classes[folder.name] = count
-
-        total += count
-
+    for index in np.argsort(predictions)[::-1]:
         print(
-            f"{folder.name}: {count}"
+            f"{CLASSES[index]:25s}: "
+            f"{predictions[index] * 100:.2f}%"
         )
 
-    print(
-        f"\nTotal images: {total}"
-    )
+    print("=" * 50)
 
-    return {
-        "classes": classes,
-        "total": total
-    }
-
-
-def analyze_taco():
-
-    print("\n========== TACO ==========")
-
-    if not TACO_PATH.exists():
-
-        print("TACO path not found:")
-        print(TACO_PATH)
-
-        return {}
-
-    image_folder = (
-        TACO_PATH / "images_raw"
-    )
-
-    annotation_file = (
-        TACO_PATH / "annotations.json"
-    )
-
-    image_info = get_image_info(
-        image_folder
-    )
-
-    print(
-        f"Images: {image_info['total']}"
-    )
-
-    print(
-        f"Corrupted images: "
-        f"{image_info['corrupted']}"
-    )
-
-    print(
-        f"Extensions: "
-        f"{image_info['extensions']}"
-    )
-
-    result = {
-        "image_info": image_info
-    }
-
-    if not annotation_file.exists():
-
-        print(
-            "annotations.json not found."
-        )
-
-        return result
-
-    try:
-
-        with open(
-            annotation_file,
-            "r",
-            encoding="utf-8"
-        ) as file:
-
-            data = json.load(file)
-
-        categories = data.get(
-            "categories",
-            []
-        )
-
-        annotations = data.get(
-            "annotations",
-            []
-        )
-
-        images = data.get(
-            "images",
-            []
-        )
-
-        print(
-            f"Annotated images: "
-            f"{len(images)}"
-        )
-
-        print(
-            f"Annotations: "
-            f"{len(annotations)}"
-        )
-
-        print(
-            f"Categories: "
-            f"{len(categories)}"
-        )
-
-        print("\nTACO categories:")
-
-        category_data = {}
-
-        for category in categories:
-
-            category_id = category.get(
-                "id"
-            )
-
-            category_name = category.get(
-                "name"
-            )
-
-            category_data[
-                str(category_id)
-            ] = category_name
-
-            print(
-                f"{category_id}: "
-                f"{category_name}"
-            )
-
-        result["annotated_images"] = (
-            len(images)
-        )
-
-        result["annotations"] = (
-            len(annotations)
-        )
-
-        result["categories"] = (
-            category_data
-        )
-
-    except Exception as error:
-
-        print(
-            "Could not read "
-            "annotations.json:"
-        )
-
-        print(error)
-
-    return result
-
-
-def count_label_files(folder):
-
-    if not folder.exists():
-        return 0
-
-    return sum(
-        1
-        for file in folder.iterdir()
-        if file.is_file()
-    )
-
-
-def analyze_rcd():
-
-    print("\n========== RCD ==========")
-
-    if not RCD_PATH.exists():
-
-        print("RCD path not found:")
-        print(RCD_PATH)
-
-        return {}
-
-    training_images = (
-        RCD_PATH
-        / "training"
-        / "image_2"
-    )
-
-    training_labels = (
-        RCD_PATH
-        / "training"
-        / "label_2"
-    )
-
-    validation_images = (
-        RCD_PATH
-        / "val"
-        / "image"
-    )
-
-    validation_labels = (
-        RCD_PATH
-        / "val"
-        / "label"
-    )
-
-    training_image_info = (
-        get_image_info(
-            training_images
-        )
-    )
-
-    validation_image_info = (
-        get_image_info(
-            validation_images
-        )
-    )
-
-    training_label_count = (
-        count_label_files(
-            training_labels
-        )
-    )
-
-    validation_label_count = (
-        count_label_files(
-            validation_labels
-        )
-    )
-
-    print(
-        f"Training images: "
-        f"{training_image_info['total']}"
-    )
-
-    print(
-        f"Training labels: "
-        f"{training_label_count}"
-    )
-
-    print(
-        f"Validation images: "
-        f"{validation_image_info['total']}"
-    )
-
-    print(
-        f"Validation labels: "
-        f"{validation_label_count}"
-    )
-
-    return {
-        "training": {
-            "images": training_image_info,
-            "labels": training_label_count
-        },
-        "validation": {
-            "images": validation_image_info,
-            "labels": validation_label_count
-        }
-    }
-
-
-def main():
-
-    print(
-        "========================================"
-    )
-
-    print(
-        "      WASTE DATASET ANALYSIS"
-    )
-
-    print(
-        "========================================"
-    )
-
-    results = {
-        "realwaste": analyze_realwaste(),
-        "taco": analyze_taco(),
-        "rcd": analyze_rcd()
-    }
-
-    output_path = (
-        PROJECT_ROOT
-        / "results"
-        / "dataset_analysis.json"
-    )
-
-    output_path.parent.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    with open(
-        output_path,
-        "w",
-        encoding="utf-8"
-    ) as file:
-
-        json.dump(
-            results,
-            file,
-            indent=4
-        )
-
-    print(
-        "\n========================================"
-    )
-
-    print(
-        "Analysis completed."
-    )
-
-    print(
-        f"Report saved to: "
-        f"{output_path}"
-    )
-
-    print(
-        "========================================"
-    )
+    del model
+    tf.keras.backend.clear_session()
 
 
 if __name__ == "__main__":
-    main()
+
+    if len(sys.argv) != 2:
+        print('Usage: python src/predict.py "C:\\path\\to\\image.jpg"')
+        sys.exit(1)
+
+    image_path = Path(sys.argv[1])
+
+    if not image_path.exists():
+        print(f"Image not found: {image_path}")
+        sys.exit(1)
+
+    image = Image.open(image_path).convert("RGB")
+    image = image.resize(IMAGE_SIZE)
+
+    image_array = np.asarray(image, dtype=np.float32)
+    image_array = np.expand_dims(image_array, axis=0)
+
+    for model_name, model_path in MODEL_PATHS.items():
+        predict_image(
+            image_path,
+            model_name,
+            model_path,
+            image_array
+        )
+```

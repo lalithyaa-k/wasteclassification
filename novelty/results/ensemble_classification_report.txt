@@ -1,0 +1,17 @@
+ENSEMBLE (equal weights) - test set
+
+                     precision    recall  f1-score   support
+
+          Cardboard     0.7034    0.7615    0.7313       109
+      Food Organics     0.7531    0.9683    0.8472        63
+              Glass     0.6339    0.6636    0.6484       107
+              Metal     0.6732    0.7277    0.6994       235
+Miscellaneous Trash     0.5730    0.8361    0.6800       305
+              Paper     0.6547    0.7913    0.7165       115
+            Plastic     0.9685    0.8609    0.9115      1963
+      Textile Trash     0.7895    0.9375    0.8571        48
+         Vegetation     1.0000    0.9091    0.9524        66
+
+           accuracy                         0.8393      3011
+          macro avg     0.7499    0.8284    0.7827      3011
+       weighted avg     0.8652    0.8393    0.8469      3011

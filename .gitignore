@@ -1,6 +1,12 @@
 venv/
-.venv/
 __pycache__/
 *.pyc
+.env
+
 datasets/
 processed/
+models/*.keras
+novelty/models/*.keras
+novelty/results/*.npy
+
+*.log

@@ -1,0 +1,22 @@
+RESNET50 TEST RESULTS
+
+Test accuracy: 0.8353
+Weighted precision: 0.8582
+Weighted recall: 0.8353
+Weighted F1-score: 0.8423
+
+                     precision    recall  f1-score   support
+
+          Cardboard       0.72      0.77      0.75       109
+      Food Organics       0.75      0.95      0.84        63
+              Glass       0.64      0.64      0.64       107
+              Metal       0.67      0.68      0.68       235
+Miscellaneous Trash       0.56      0.83      0.67       305
+              Paper       0.65      0.70      0.68       115
+            Plastic       0.96      0.87      0.91      1963
+      Textile Trash       0.80      0.83      0.82        48
+         Vegetation       0.98      0.89      0.94        66
+
+           accuracy                           0.84      3011
+          macro avg       0.75      0.80      0.77      3011
+       weighted avg       0.86      0.84      0.84      3011

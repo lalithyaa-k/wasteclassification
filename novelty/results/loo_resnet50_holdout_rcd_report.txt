@@ -1,0 +1,7 @@
+              precision    recall  f1-score   support
+
+     Plastic     1.0000    0.5101    0.6756      9709
+
+   micro avg     1.0000    0.5101    0.6756      9709
+   macro avg     1.0000    0.5101    0.6756      9709
+weighted avg     1.0000    0.5101    0.6756      9709
